@@ -1,0 +1,236 @@
+<script language=javascript>
+
+var xhr;
+
+function establecerConexion(urlString)
+{
+  //1. Establecer conexion
+  xhr.open("GET",urlString,true);
+  //2.ActionListener
+  xhr.onreadystatechange=obtenerDatos;
+  //3.Cerrar Conexion
+  xhr.send(null);
+
+        //alert("establecerConexion");
+}
+
+function obtenerDatos()
+{
+  var titulo="";
+  var autor="";
+  var editorial="";
+  var existencia="";
+  var clave="";
+  var titulo="";
+
+  if(xhr.readyState == 4)
+  {
+
+    try
+     {
+
+    //NEW
+        //Eval soporta todas las notaciones
+        //var libros= eval("("+xhr.responseText+")");
+        //Solo notación doble comilla
+          var libros=JSON.parse(xhr.responseText);
+
+        var htmlFormat="<h2>Catalogo de Libros</h2>";
+        htmlFormat=htmlFormat+"<table border=1>";
+
+        htmlFormat=htmlFormat+"<tr><td>Clave</td><td>Titulo</td><td>Autor</td><td>Editorial</td><td>Existencia</td><td>Imagen</td></tr>";
+
+        for(i=0;i<libros.length;i++)
+        {
+          titulo=libros[i].titulo;
+          autor=libros[i].autor;
+          editorial=  libros[i].editorial;
+          existencia=libros[i].existencia;
+          clave=libros[i].clave;
+          imagen=titulo+".jpg";
+
+
+          htmlFormat=htmlFormat+"<tr><td>"+clave+"</td><td>"+titulo+"</td><td>"+autor+"</td><td>"+editorial+"</td><td>"+existencia+"</td><td><img src=\"images/"+imagen+"\" onerror=\"this.src = 'images/default.jpg'\"></td></td></tr>";
+
+          document.getElementById("transaccion").innerHTML=htmlFormat;
+        }
+
+    }
+        catch(error)
+        {
+          //document.getElementById("transaccion").innerHTML=xhr.responseText;
+          document.getElementById("transaccion").innerHTML="Error:"+error;
+        }
+      }
+  }
+
+
+function capturarDatos()
+{
+  //alert("Capturar Datos...");
+  document.getElementById("transaccion".innerHTML="Capturar Datos...");
+
+  //1. Obtener datos de Textfields del form html
+  var clave=document.getElementById("clave").value;
+  var titulo=document.getElementById("titulo").value;
+  //alert(titulo);
+
+  var autor=document.getElementById("autor").value;
+  //alert(autor);
+
+  var editorial=document.getElementById("editorial").value;
+  var existencia=document.getElementById("existencia").value;
+  //alert(editorial);
+
+  //2. Validar que campos/valores no estén vacíos
+  if(clave==""||titulo==""||autor==""||editorial==""||existencia=="")
+  {
+    alert("Algun campo esta vacio...");
+    document.getElementById("transaccion").innerHTML="Algun Campo esta vacio..";
+
+  }
+
+  else
+  {
+      //var datos=titulo+"_"+autor+"_"+editorial;
+      //alert(datos);
+      //document.getElementById("transaccion").innerHTML=datos;
+
+      //3.PReparar el URL String
+      var urlString ="../libroJSPJson/libro.jsp?bCapturar=capturar&clave="+clave+"&titulo="+titulo+"&autor="+autor+"&editorial="+editorial+"&existencia="+existencia;
+      //alert(urlString);
+
+      //4.Crear objeto de conexion con xmlhttprequest
+      xhr= new XMLHttpRequest();
+
+
+      //5. establecerConexion con XMLHttpRequest
+      establecerConexion(urlString);
+
+    }
+  }
+
+
+
+function consultar()
+{
+  //1.Preparar el url string
+  //webapp/recurso/sintaxis de url encoding
+  var urlString="../libroJSPJson/libro.jsp?bConsultar=consultar";
+
+  //4.Crear objeto de conexion con xmlhttprequest
+  xhr= new XMLHttpRequest();
+
+  //5. Establecer la conexión con el server Http para realizar las transaccion
+  establecerConexion(urlString);
+  alert(urlString);
+}
+
+function consultarEditorial()
+{
+  //1.Obtener la editorial del textfield correspondiente
+  var editorial = document.getElementById("editorial").value;
+  //2. Validar que no este vacia
+    if(editorial == "")
+    {
+      document.getElementById("transaccion").innerHTML="Editorial esta vacio..";
+    }
+    else
+      {
+        //3.Preparar el url string
+        //webapp/recurso/sintaxis de url encoding
+        var urlString="../libroJSPJson/libro.jsp?bConsultar=consultarEditorial&editorial="+editorial;
+
+        //4.Crear objeto de conexion con xmlhttprequest
+        xhr= new XMLHttpRequest();
+
+        //5. Establecer la conexión con el server Http para realizar las transaccion
+        establecerConexion(urlString);
+        alert(urlString);
+      }
+}
+
+function consultarTitulo()
+{
+  //1.Obtener el titulo del textfield correspondiente
+  var titulo = document.getElementById("titulo").value;
+  //2. Validar que no este vacia
+    if(titulo == "")
+    {
+      document.getElementById("transaccion").innerHTML="Editorial esta vacio..";
+    }
+    else
+      {
+        //3.Preparar el url string
+        //webapp/recurso/sintaxis de url encoding
+        var urlString="../libroJSPJson/libro.jsp?bConsultar=consultarTitulo&titulo="+titulo;
+
+        //4.Crear objeto de conexion con xmlhttprequest
+        xhr= new XMLHttpRequest();
+
+        //5. Establecer la conexión con el server Http para realizar las transaccion
+        establecerConexion(urlString);
+        alert(urlString);
+      }
+
+
+}
+function consultarAutor()
+{
+  //1.Obtener el titulo del textfield correspondiente
+  var autor = document.getElementById("autor").value;
+  //2. Validar que no este vacia
+    if(autor == "")
+    {
+      document.getElementById("transaccion").innerHTML="Autor esta vacio..";
+    }
+    else
+      {
+        //3.Preparar el url string
+        //webapp/recurso/sintaxis de url encoding
+        var urlString="../libroJSPJson/libro.jsp?bConsultar=consultarAutor&autor="+autor;
+
+        //4.Crear objeto de conexion con xmlhttprequest
+        xhr= new XMLHttpRequest();
+
+        //5. Establecer la conexión con el server Http para realizar las transaccion
+        establecerConexion(urlString);
+        alert(urlString);
+      }
+    }
+
+
+
+</script>
+
+
+
+<html>
+   <head>
+   	  <title>Biblio Json</title>
+   </head>
+   <body>
+     <center>
+   	   <h1>CATALOGO DE LIBROS Json</h1>
+   	   <form action="../libroJSPJson/libro.jsp"  method="get">
+          CLAVE :      <input type="text" name="clave" id="clave"  value=""><br/>
+   	   	  TITULO: <input type="text" name="titulo" id="titulo"  value=""><br/>
+   	   		AUTOR:     <input type="text" name="autor" id="autor" value=""><br/>
+   	   		EDITORIAL :      <input type="text" name="editorial" id="editorial"  value=""><br/>
+          EXISTENCIA:      <input type="text" name="existencia" id="existencia"  value=""><br/>
+
+   	   					<input type="button" name="bCapturar"  id="bCapturar" value="Capturar Datos" onclick="capturarDatos();">
+   	   					<input type="button" name="bConsultar" id="bConsultar" value="Consultar" onclick="consultar();"><br/>
+   	   					<input type="button" name="bConsultar" id="bConsultarEditorial" value="Consultar Editorial" onclick="consultarEditorial();">
+   	   					<input type="button" name="bConsultar" id="bConsultarTitulo"  value="Consultar Titulo" onclick="consultarTitulo();">
+                <input type="button" name="bConsultar" id="bConsultarAutor"  value="Consultar Autor" onclick="consultarAutor();"><br/><br/>
+
+
+
+
+   	   </form>
+     <br/><br/>
+     Resultado: <div id="transaccion"></div>
+   </center>
+   </body>
+</html>
